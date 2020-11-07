@@ -1,0 +1,22 @@
+---
+- name: SSL Certificate Expiration Date
+  hosts: localhost
+  tasks:
+    - community.crypto.get_certificate:
+        host: "{{item}}"
+        port: 443
+      delegate_to: localhost
+      register: cert
+      loop: "{{ lookup('file', 'hosts.txt').splitlines() }}"
+      ignore_errors: yes
+      no_log: True
+
+    - debug: var=cert
+      no_log: True
+
+    - debug:
+        msg: "{{host_name}} expires in: {{ expire_days }} days."
+      vars:
+        host_name: "{{item.item}}"
+        expire_days: "{{ (( item.not_after | to_datetime('%Y%m%d%H%M%SZ')) - (ansible_date_time.iso8601 | to_datetime('%Y-%m-%dT%H:%M:%SZ')) ).days }}"
+      with_items: "{{cert.results}}"

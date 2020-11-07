@@ -1,0 +1,13 @@
+---
+- name: Telnet Port Testing
+  hosts: localhost
+  tasks:
+    - name: Print a message
+      wait_for:
+        host: "{{item}}"
+        port: 443
+        state: started
+        delay: 0
+        timeout: 3
+      loop: "{{ lookup('file', 'hosts.txt').splitlines() }}"
+      ignore_errors: yes
