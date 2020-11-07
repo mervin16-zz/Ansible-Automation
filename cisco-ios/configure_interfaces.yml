@@ -1,0 +1,53 @@
+---
+- name: "Configure Interfaces"
+  hosts: routers_cisco
+  gather_facts: no
+  tasks:
+    - name: Configure GigabitEthernet 2-4 with Internal IPs
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: GigabitEthernet2
+            ipv4:
+              - address: 10.2.0.1/24
+          - name: GigabitEthernet3
+            ipv4:
+              - address: 10.3.0.1/24
+          - name: GigabitEthernet4
+            ipv4:
+              - address: 10.4.0.1/24
+        state: merged
+
+    - name: Configure Interface Details
+      cisco.ios.ios_interfaces:
+        config:
+          - name: GigabitEthernet2
+            description: Configured and Merged by Ansible Network
+            enabled: true
+          - name: GigabitEthernet3
+            description: Configured and Merged by Ansible Network
+            enabled: true
+          - name: GigabitEthernet4
+            description: Configured and Merged by Ansible Network
+            enabled: true
+          - name: Loopback10
+            description: Configured and Merged by Ansible Network
+            enabled: true
+          - name: Loopback20
+            description: Configured and Merged by Ansible Network
+            enabled: true
+        state: merged
+
+    - name: Configure Loopback addresses
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: Loopback10
+            ipv4:
+              - address: 10.10.0.1/24
+          - name: Loopback20
+            ipv4:
+              - address: 10.20.0.1/24
+        state: merged
+
+    - name: Write Configurations
+      cisco.ios.ios_command:
+        commands: write memory
