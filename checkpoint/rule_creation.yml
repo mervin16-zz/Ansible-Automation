@@ -1,0 +1,118 @@
+---
+- name: Checkpoint Rulebase Creation
+  hosts: firewalls_checkpoint
+  connection: httpapi
+  tasks:
+    ###########################################################
+    ############ Add Access Rule to Layer Standard ############
+    ###########################################################
+
+    - name: Network-> Rule 1
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Network
+        name: S_001
+        position: 1
+        source:
+          - Host_10.0.0.1
+        service:
+          - http
+          - https
+        action: Accept
+        track:
+          type: Log
+        state: present
+
+    - name: Network-> Rule 2
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Network
+        name: S_002
+        position: 2
+        source:
+          - Net_172.0.0.0_24
+          - Host_10.0.0.2
+        destination:
+          - Net_172.0.0.0_24
+          - Host_10.0.0.2
+        service:
+          - ssh
+        action: Accept
+        state: present
+
+    ###########################################################
+    ############ Add Access Rule to Layer Premium ############
+    ###########################################################
+
+    - name: Premium-> Rule 1
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Premium Network
+        name: P_001
+        position: 1
+        destination:
+          - Host_10.0.0.2
+          - Host_10.0.0.3
+        action: Accept
+        track:
+          type: Log
+        comments: Heat 123435
+        state: present
+
+    - name: Premium-> Rule 2
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Premium Network
+        name: P_002
+        position: 2
+        source:
+          - Net_172.0.0.0_24
+          - Host_10.0.0.2
+        destination:
+          - Net_172.0.0.0_24
+          - Host_10.0.0.2
+        service:
+          - ssh
+        action: Accept
+        state: present
+
+    ###########################################################
+    ############ Add Access Rule to Layer Internet ############
+    ###########################################################
+
+    - name: Internet-> Rule 1
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Internet Network
+        name: I_001
+        position: 1
+        source:
+          - Host_10.0.0.1
+          - Host_10.0.0.2
+          - Host_10.0.0.3
+        destination:
+          - Host_10.0.0.2
+          - Host_10.0.0.3
+        action: Accept
+        track:
+          type: Log
+        comments: Heat 123435
+        state: present
+
+    - name: Internet-> Rule 2
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Internet Network
+        name: I_002
+        position: 2
+        source:
+          - Net_172.0.0.0_24
+          - Host_10.0.0.2
+        destination:
+          - Net_172.0.0.0_24
+          - Host_10.0.0.2
+        service:
+          - ssh
+        action: Accept
+        state: present
+
+    #############################################
+    ############ Publish the session ############
+    #############################################
+
+    - name: Publish the session
+      check_point.mgmt.cp_mgmt_publish:

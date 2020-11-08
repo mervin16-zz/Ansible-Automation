@@ -1,0 +1,74 @@
+---
+- name: Checkpoint Rulebase Creation
+  hosts: firewalls_checkpoint
+  connection: httpapi
+  tasks:
+    #####################################################
+    ############ Create your necessary hosts ############
+    #####################################################
+
+    - name: Create Host 10.0.0.1
+      check_point.mgmt.cp_mgmt_host:
+        ipv4_address: 10.0.0.1
+        name: Host_10.0.0.1
+        state: present
+
+    - name: Create Host 10.0.0.2
+      check_point.mgmt.cp_mgmt_host:
+        ipv4_address: 10.0.0.2
+        name: Host_10.0.0.2
+        state: present
+
+    - name: Create Host 10.0.0.3
+      check_point.mgmt.cp_mgmt_host:
+        ipv4_address: 10.0.0.3
+        name: Host_10.0.0.3
+        state: present
+
+    ########################################################
+    ############ Create your necessary networks ############
+    ########################################################
+
+    - name: Create Network 172.0.0.0/24
+      check_point.mgmt.cp_mgmt_network:
+        name: "Net_172.0.0.0_24"
+        subnet: "172.0.0.0"
+        mask_length: 24
+
+    - name: Create Network 192.168.100.0/24
+      check_point.mgmt.cp_mgmt_network:
+        name: "Net_192.168.100.0_24"
+        subnet: "192.168.100.0"
+        mask_length: 24
+
+    ####################################################
+    ############ Create your Policy Package ############
+    ####################################################
+
+    - name: Create Policy Package Premium
+      check_point.mgmt.cp_mgmt_package:
+        access: true
+        name: Premium
+        state: present
+        threat_prevention: false
+
+    - name: Create Policy Package Internet
+      check_point.mgmt.cp_mgmt_package:
+        access: true
+        name: Internet
+        state: present
+        threat_prevention: false
+
+    - name: Create Policy Package DMZ
+      check_point.mgmt.cp_mgmt_package:
+        access: true
+        name: DMZ
+        state: present
+        threat_prevention: false
+
+    #############################################
+    ############ Publish the session ############
+    #############################################
+
+    - name: Publish the session
+      check_point.mgmt.cp_mgmt_publish:
