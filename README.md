@@ -33,7 +33,7 @@ Linux (This is in-built in Ansible)
 
 Below is a list of tasks available through playbooks across each platforms in this repository
 
-```Note: Several tasks may be found inside a single playbook. Pelase go through them individually to find the task that suits you```
+```Note: Several tasks may be found inside a single playbook. Please go through them individually to find the task that suits you```
 
 ### Checkpoint
 - Access Rule creation
