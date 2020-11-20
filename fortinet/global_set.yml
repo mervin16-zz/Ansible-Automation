@@ -1,0 +1,18 @@
+---
+- name: Configure Global Hostname on FortiGate
+  hosts: fortigates
+  collections:
+    - fortinet.fortios
+  connection: httpapi
+  vars:
+    vdom: "root"
+    ansible_httpapi_use_ssl: no
+    ansible_httpapi_validate_certs: no
+    ansible_httpapi_port: 80
+  tasks:
+    - name: Configure global attributes.
+      fortios_system_global:
+        vdom: "{{ vdom }}"
+        system_global:
+          admintimeout: "23"
+          hostname: "My-Shared-Firewall"

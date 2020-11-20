@@ -1,0 +1,52 @@
+---
+- name: Configure A Policy on FortiGate
+  hosts: fortigates
+  collections:
+    - fortinet.fortios
+  connection: httpapi
+  vars:
+    vdom: "root"
+    ansible_httpapi_use_ssl: no
+    ansible_httpapi_validate_certs: no
+    ansible_httpapi_port: 80
+  tasks:
+    - name: Configure Host 10.0.0.10
+      fortios_firewall_address:
+        vdom: "{{ vdom }}"
+        state: "present"
+        firewall_address:
+          allow_routing: "enable"
+          name: "Host_10.0.0.10"
+          subnet: "21.0.0.0/255.255.255.255"
+          type: "ipmask"
+
+    - name: Configure Net address 192.168.100.0/24
+      fortios_firewall_address:
+        vdom: "{{ vdom }}"
+        state: "present"
+        firewall_address:
+          allow_routing: "enable"
+          name: "Net_192.168.100.0"
+          subnet: "192.168.100.0/255.255.255.0"
+          type: "ipmask"
+
+    - name: Configure IPv4 policy.
+      fortios_firewall_policy:
+        vdom: "{{ vdom }}"
+        firewall_policy:
+          state: "present"
+          policyid: 2
+          name: "My_First_Rule"
+          srcintf:
+            - name: any
+          dstintf:
+            - name: any
+          srcaddr:
+            - name: "Host_10.0.0.10"
+          dstaddr:
+            - name: "Net_192.168.100.0"
+          service:
+            - name: "HTTP"
+          action: "accept"
+          nat: "disable"
+          logtraffic: "all"
