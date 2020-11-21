@@ -18,7 +18,7 @@ jobs:
         with:
           # [required]
           # Path to Ansible playbooks
-          targets: "*.yml"
+          targets: "Ansible-AUtomation/checkpoint/rule_creation.yml"
 
           override-deps: |
             ansible==2.9
