@@ -28,6 +28,7 @@ To run the playbooks for each platform, individual collections for each platform
 
 Linux (This is in-built in Ansible)
 
+Or you can use the Dockerfile (or the package) to run a container with Ansible and its collections installed. You just need to move the playbooks in the container and start executing your tasks.
 
 ## Tasks per Platform
 
