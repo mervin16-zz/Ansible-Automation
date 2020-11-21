@@ -18,7 +18,7 @@ jobs:
         with:
           # [required]
           # Path to Ansible playbooks
-          targets: "./"
+          targets: "./**/*.yml"
 
           # [optional]
           # Arguments to be passed to the ansible-lint
